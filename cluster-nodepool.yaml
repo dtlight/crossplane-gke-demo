@@ -1,0 +1,31 @@
+apiVersion: container.gcp.crossplane.io/v1beta2
+kind: Cluster
+metadata:
+  name: example-cluster
+spec:
+  forProvider:
+    addonsConfig:
+      httpLoadBalancing:
+    location: europe-west2
+    network: "crossplane-demo-network" 
+    networkPolicy:
+      enabled: true
+      provider: CALICO
+    subnetwork: crossplane-demo-subnet
+  providerConfigRef:
+    name: crossplane-provider-gcp
+---
+apiVersion: container.gcp.crossplane.io/v1beta1
+kind: NodePool
+metadata:
+  name: crossplane-nodepool
+spec:
+  forProvider:
+    clusterRef:
+      name: example-cluster
+    config:
+      machineType: n1-standard-1
+    locations:
+      - "europe-west2"
+  providerConfigRef:
+    name: crossplane-provider-gcp
