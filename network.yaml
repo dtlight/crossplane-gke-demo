@@ -1,0 +1,26 @@
+apiVersion: compute.gcp.crossplane.io/v1beta1
+kind: Network
+metadata:
+  name: crossplane-demo-network
+spec:
+  forProvider:
+    description: 'This is a network built by crossplane' 
+    routingConfig:
+      routingMode: 'GLOBAL'
+  providerConfigRef:
+    name: crossplane-provider-gcp
+---
+apiVersion: compute.gcp.crossplane.io/v1beta1
+kind: Subnetwork
+metadata:
+  name: crossplane-demo-subnet
+spec:
+  forProvider:
+    ipCidrRange: 10.154.0.0/20
+    privateIpGoogleAccess: true
+    networkRef: 
+      # ensure this matches the network name you defined in Network
+      name: crossplane-demo-network
+    region: europe-west2
+  providerConfigRef:
+    name: crossplane-provider-gcp
